@@ -24,6 +24,7 @@ Use the following code to watch a server:
 
 
   if Meteor.isClient
+    # This is reactive
     if serverWatch.isAlive "SomeServer"
       # Celebrate!
     else
