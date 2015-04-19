@@ -22,6 +22,12 @@ Use the following code to watch a server:
     keys = serverWatch.getKeys()
     serverWatch.stopWatching keys[0]
 
+    # Between "pings" I might discover that the server is down/up
+    serverWatch.overrideStatus "SomeServer", true
+
+    # Force a refresh
+    serverWatch.refresh "SomeServer"
+
 
   if Meteor.isClient
     # This is reactive
