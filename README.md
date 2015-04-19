@@ -26,7 +26,9 @@ Use the following code to watch a server:
     serverWatch.overrideStatus "SomeServer", true
 
     # Force a refresh
-    serverWatch.refresh "SomeServer"
+    serverWatch.refresh "SomeServer", (isAlive) ->
+      if isAlive
+        console.log "It is alive!"
 
 
   if Meteor.isClient

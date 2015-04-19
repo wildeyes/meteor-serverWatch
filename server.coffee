@@ -13,7 +13,7 @@ sendOnePing = (doc, callback) ->
         isAlive: isAlive
 
     if typeof callback is "function"
-      callback()
+      callback isAlive
 
 
 ping = (doc) ->
@@ -34,9 +34,9 @@ getByKey = (key) ->
   return doc
 
 
-serverWatch.refresh = (key) ->
+serverWatch.refresh = (key, callback) ->
   doc = getByKey key
-  sendOnePing doc
+  sendOnePing doc, callback
 
 
 serverWatch.overrideStatus = (key, isAlive) ->

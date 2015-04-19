@@ -1,6 +1,6 @@
 Package.describe({
   name: "bjwiley2:server-watch",
-  version: "0.0.4",
+  version: "0.0.5",
   // Brief, one-line summary of the package.
   summary: "Enables third party server pinging functionality",
   // URL to the Git repository containing the source code for this package.
