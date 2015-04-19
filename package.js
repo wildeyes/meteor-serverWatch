@@ -11,9 +11,9 @@ Package.describe({
 });
 
 Package.onUse(function(api) {
-  api.use("meteor-platform@1.2.1");
-  api.use("http");
-  api.use("coffeescript");
+  api.use("meteor-platform@1.2.2");
+  api.use("http@1.1.0");
+  api.use("coffeescript@1.0.6");
 
   api.addFiles("shared.coffee");
   api.addFiles("server.coffee", "server");
