@@ -1,12 +1,8 @@
 Package.describe({
   name: "wildeyes:server-watch",
-  version: "0.0.6",
-  // Brief, one-line summary of the package.
-  summary: "Enables third party server pinging functionality",
-  // URL to the Git repository containing the source code for this package.
-  git: "https://github.com/NewSpring/meteor-serverWatch.git",
-  // By default, Meteor will default to using README.md for documentation.
-  // To avoid submitting documentation, set this field to null.
+  version: "0.0.7",
+  summary: "Fork:Enables third party server pinging functionality",
+  git: "https://github.com/wildeyes/meteor-serverWatch.git",
   documentation: "README.md"
 });
 

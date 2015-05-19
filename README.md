@@ -1,4 +1,4 @@
-Server Watch
+Wildeyes fork of Server Watch
 ===
 
 Enables third party server pinging functionality.
