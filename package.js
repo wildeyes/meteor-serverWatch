@@ -1,5 +1,5 @@
 Package.describe({
-  name: "bjwiley2:server-watch",
+  name: "wildeyes:server-watch",
   version: "0.0.6",
   // Brief, one-line summary of the package.
   summary: "Enables third party server pinging functionality",
