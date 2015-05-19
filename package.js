@@ -1,5 +1,5 @@
 Package.describe({
-  name: "wildeyes:server-watch",
+  name: "xwildeyes:server-watch",
   version: "0.0.7",
   summary: "Fork:Enables third party server pinging functionality",
   git: "https://github.com/wildeyes/meteor-serverWatch.git",
