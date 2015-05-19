@@ -3,18 +3,16 @@ callOptions = timeout: 5000
 
 
 sendOnePing = (doc, callback) ->
-  HTTP.get doc.url, callOptions, (error, result) ->
-    isAlive = (not error) and result and result.statusCode is 200
+  try
+    HTTP.get doc.url, callOptions, (error, result) ->
+      isAlive = (not error) and result and result.statusCode is 200
 
-    serverWatches.update
-      _id: doc._id
-    ,
-      $set:
-        isAlive: isAlive
+      serverWatches.update {key:doc.key} , {$set: isAlive: isAlive} , upsert: true
 
-    if typeof callback is "function"
-      callback isAlive
-
+      if typeof callback is "function"
+        callback isAlive
+  catch e
+    throw e
 
 ping = (doc) ->
   handle = Meteor.setInterval ->
@@ -45,12 +43,7 @@ serverWatch.overrideStatus = (key, isAlive) ->
   if typeof isAlive isnt "boolean"
     throw new Meteor.Error "invalid param", "isAlive must be a boolean"
 
-  serverWatches.update
-    _id: existing._id
-  ,
-    $set:
-      isAlive: isAlive
-
+  serverWatches.update {key:doc.key} , {$set: isAlive: isAlive} , upsert: true
 
 serverWatch.getKeys = ->
   serverWatches.find({}, fields: key: 1).map (doc) ->
@@ -58,14 +51,11 @@ serverWatch.getKeys = ->
 
 
 serverWatch.watch = (key, url, delay) ->
+  debugger
   existing = serverWatches.findOne key: key
 
   if typeof delay isnt "undefined"
     delay = Number delay
-
-  if existing
-    throw new Meteor.Error "key-exists-already", "There is already a server
-      associated with that key"
 
   if typeof key isnt "string" or key.trim().length is 0
     throw new Meteor.Error "invalid param", "key must be a non-empty string"
@@ -83,8 +73,7 @@ serverWatch.watch = (key, url, delay) ->
     delay: delay or (30 * 1000)
     isAlive: true
 
-  id = serverWatches.insert newDoc
-  newDoc._id = id
+  serverWatches.upsert(key: key, newDoc)
 
   try
     sendOnePing newDoc, ->
