@@ -1,18 +1,23 @@
 handles = {}
 callOptions = timeout: 5000
-
+pingWithTCP = true
+npmPing = Npm.require('ping')
+wrappedPing = Meteor.wrapAsync(npmPing.sys.probe, npmPing.sys)
 
 sendOnePing = (doc, callback) ->
-  try
-    HTTP.get doc.url, callOptions, (error, result) ->
-      isAlive = (not error) and result and result.statusCode is 200
-
+  if pingWithTCP
+    wrappedPing doc.url, (isAlive)->
       serverWatches.update {key:doc.key} , {$set: isAlive: isAlive} , upsert: true
-
       if typeof callback is "function"
         callback isAlive
-  catch e
-    throw e
+  else
+    HTTP.get doc.url, callOptions, (error, result, callback) ->
+    isAlive = (not error) and result and result.statusCode is 200
+
+    serverWatches.update {key:doc.key} , {$set: isAlive: isAlive} , upsert: true
+
+    if typeof callback is "function"
+      callback isAlive
 
 ping = (doc) ->
   handle = Meteor.setInterval ->
@@ -51,7 +56,7 @@ serverWatch.getKeys = ->
 
 
 serverWatch.watch = (key, url, delay) ->
-  debugger
+
   existing = serverWatches.findOne key: key
 
   if typeof delay isnt "undefined"
@@ -85,13 +90,12 @@ serverWatch.watch = (key, url, delay) ->
 
 serverWatch.stopWatching = (key) ->
   watch = getByKey key
-  handle = handles[watch._id]
 
   if handle
     Meteor.clearInterval handle
-    delete handles[watch._id]
+    delete handles[watch.key]
 
-  serverWatches.remove watch._id
+  serverWatches.remove watch.key
 
 
 Meteor.startup ->

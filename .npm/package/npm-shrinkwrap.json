@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "ping": {
+      "version": "0.1.10",
+      "dependencies": {
+        "q": {
+          "version": "1.4.1"
+        }
+      }
+    }
+  }
+}

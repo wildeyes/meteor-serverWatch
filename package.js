@@ -6,6 +6,10 @@ Package.describe({
   documentation: "README.md"
 });
 
+Npm.depends({
+  ping: "0.1.10"
+})
+
 Package.onUse(function(api) {
   api.use("meteor-platform@1.2.2");
   api.use("http@1.1.0");
