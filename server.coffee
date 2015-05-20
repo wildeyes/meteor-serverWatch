@@ -24,7 +24,7 @@ ping = (doc) ->
     sendOnePing doc
   , doc.delay
 
-  handles[doc._id] = handle
+  handles[doc.key] = handle
 
 
 getByKey = (key) ->
@@ -90,6 +90,7 @@ serverWatch.watch = (key, url, delay) ->
 
 serverWatch.stopWatching = (key) ->
   watch = getByKey key
+  handle = handles[watch.key]
 
   if handle
     Meteor.clearInterval handle
