@@ -1,15 +1,26 @@
 handles = {}
 callOptions = timeout: 5000
 pingWithTCP = true
-npmPing = Npm.require('ping')
-wrappedPing = Meteor.wrapAsync(npmPing.sys.probe, npmPing.sys)
+npmPing = Npm.require('net-ping')
+session = npmPing.createSession()
+pingHost = session.pingHost.bind session
+# wrappedPing = Meteor.wrapAsync(npmPing.sys.probe, npmPing.sys)
 
 sendOnePing = (doc, callback) ->
   if pingWithTCP
-    wrappedPing doc.url, (isAlive)->
-      serverWatches.update {key:doc.key} , {$set: isAlive: isAlive} , upsert: true
-      if typeof callback is "function"
-        callback isAlive
+    _isAlive = Async.runSync (done) ->
+      pingHost doc.url, (error, target)->
+        if error
+          console.error "PING #{target} failed with #{error}."
+          done error, false
+        else
+          # console.log "PING #{target} succeeded."
+          done null, true
+    isAlive = _isAlive.result
+    serverWatches.update {key:doc.key} , {$set: isAlive: isAlive} , upsert: true
+
+    if typeof callback is "function"
+      callback isAlive
   else
     HTTP.get doc.url, callOptions, (error, result, callback) ->
     isAlive = (not error) and result and result.statusCode is 200

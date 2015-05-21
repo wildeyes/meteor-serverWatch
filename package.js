@@ -7,7 +7,7 @@ Package.describe({
 });
 
 Npm.depends({
-  ping: "0.1.10"
+  "net-ping": "1.1.11"
 })
 
 Package.onUse(function(api) {
